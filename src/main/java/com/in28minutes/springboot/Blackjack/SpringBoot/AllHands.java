@@ -2,12 +2,9 @@ package com.in28minutes.springboot.Blackjack.SpringBoot;
 
 import java.util.ArrayList;
 
-import com.in28minutes.springboot.Blackjack.SpringBoot.Hand;
-
 public class AllHands {
-	
 	ArrayList<Hand> playerHands = new ArrayList<Hand>(); //array of Json objects
-	int split = 0;
+	static int split = 0;
 	
 	public void addData(Hand data) {
 		playerHands.add(data);
@@ -34,3 +31,4 @@ public class AllHands {
 		split++;
 	}
 }
+
