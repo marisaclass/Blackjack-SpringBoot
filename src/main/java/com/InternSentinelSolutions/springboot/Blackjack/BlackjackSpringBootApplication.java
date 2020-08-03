@@ -1,4 +1,4 @@
-package com.in28minutes.springboot.Blackjack.SpringBoot;
+package com.InternSentinelSolutions.springboot.Blackjack;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

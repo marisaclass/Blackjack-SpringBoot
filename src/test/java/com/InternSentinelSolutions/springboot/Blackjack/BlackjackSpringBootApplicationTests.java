@@ -1,4 +1,4 @@
-package com.in28minutes.springboot.Blackjack.SpringBoot;
+package com.InternSentinelSolutions.springboot.Blackjack;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

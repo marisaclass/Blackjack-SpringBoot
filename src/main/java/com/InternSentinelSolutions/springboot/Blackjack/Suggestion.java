@@ -1,8 +1,8 @@
-package com.in28minutes.springboot.Blackjack.SpringBoot;
+package com.InternSentinelSolutions.springboot.Blackjack;
 
 import java.util.ArrayList;
 
-import com.in28minutes.springboot.Blackjack.SpringBoot.Action;
+import com.InternSentinelSolutions.springboot.Blackjack.Action;
 
 public class Suggestion {
 	public static Action getAdvice(int dealer, Hand hand, AllHands all){

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Home Page</title>
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+	Welcome to Blackjack!
+	<form action="#" th:action="@{/playerinfo}" th:object="${playerinfo}" method="post">
+		<div class="set">
+			 <label for="fname">Enter your first name:</label><br>
+	  		<input type="text" th:field="*{fname}" required><br>
+	  		
+			 <label for="decks">Set shoe</label><br>
+	  		<input type="number" th:field="*{decks}"required><br>
+	  		
+	  		<label for="bank">Set bankroll</label><br>
+	  		<input type="number" th:field="*{bankroll}"required><br>
+	  		
+	  		<label for="bet">Set starting bet</label><br>
+	  		<input type="number" th:field="*{bet}"required><br>
+	  		
+			<button type="submit" form="Submit" class="btn btn-outline-success">Click here to start a new game</button>
+		</div>
+	</form>
+	
+</body>
+</html>

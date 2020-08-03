@@ -1,4 +1,4 @@
-package com.in28minutes.springboot.Blackjack.SpringBoot;
+package com.InternSentinelSolutions.springboot.Blackjack;
 
 public enum Action {
 
@@ -22,6 +22,18 @@ public enum Action {
 	DOUBLE {
 		@Override public String toString(){ 
 			return "Double"; 
+		} 
+	}, 
+	
+	INSURANCE {
+		@Override public String toString(){ 
+			return "Insurance"; 
+		} 
+	}, 
+	
+	SUGGESTION {
+		@Override public String toString(){ 
+			return "Suggestion Utility"; 
 		} 
 	}, 
 	

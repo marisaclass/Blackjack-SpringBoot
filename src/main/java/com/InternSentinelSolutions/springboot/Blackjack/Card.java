@@ -1,4 +1,4 @@
-package com.in28minutes.springboot.Blackjack.SpringBoot;
+package com.InternSentinelSolutions.springboot.Blackjack;
 
 public class Card {
 	private String rank;
