@@ -25,11 +25,13 @@ public class PlayerController {
     }
 	
     @PostMapping("/playerinfo")
-	public void playerStart(@ModelAttribute PlayerInfo player, Model model){
+	public String playerStart(@ModelAttribute PlayerInfo player, Model model){
     	model.addAttribute("playerinfo", player);
     	
     	//start game -> 
     	TodoService.retrieveTodos(player.getDecks(), player.getBankroll(), player.getBet());
+    	
+    	return "playerinfo";
 	}
 	
 }
