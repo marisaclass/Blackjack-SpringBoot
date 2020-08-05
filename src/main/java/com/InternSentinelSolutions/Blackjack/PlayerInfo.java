@@ -1,4 +1,4 @@
-package com.InternSentinelSolutions.springboot.Blackjack;
+package com.InternSentinelSolutions.Blackjack;
 
 import java.math.BigDecimal;
 import java.util.Random;

@@ -1,4 +1,4 @@
-package com.InternSentinelSolutions.springboot.Blackjack;
+package com.InternSentinelSolutions.Blackjack;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,12 +23,12 @@ public class PlayerController {
     	this.bet = BigDecimal.ZERO;
     }
 	
-    @GetMapping("/playerinfo/getBankroll")
+    @GetMapping("/playercontroller/getBankroll")
     public String getBankroll() {
     	return player.getBankroll().toString();
     }
     
-	@GetMapping("/playerinfo")
+	@GetMapping("/playercontroller")
     public void playerForm(@RequestParam("fname") String name, @RequestParam("decks") int decks, @RequestParam("bankroll") String bankroll,
     		@RequestParam("bet") String bet){
 		

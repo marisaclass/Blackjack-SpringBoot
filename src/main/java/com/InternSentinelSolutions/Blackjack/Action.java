@@ -1,4 +1,4 @@
-package com.InternSentinelSolutions.springboot.Blackjack;
+package com.InternSentinelSolutions.Blackjack;
 
 public enum Action {
 

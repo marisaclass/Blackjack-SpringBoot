@@ -1,4 +1,4 @@
-package com.InternSentinelSolutions.springboot.Blackjack;
+package com.InternSentinelSolutions.Blackjack;
 
 import java.util.ArrayList;
 

@@ -11,11 +11,11 @@
   <script>
   function playerForm() {
 		$.ajax({
-			url: "/playerinfo?fname=" + document.getElementById("fname").value + "?shoe=" + document.getElementById("decks").value
+			url: "/playercontroller?fname=" + document.getElementById("fname").value + "?shoe=" + document.getElementById("decks").value
 				+ "?bet=" + document.getElementById("bet").value
 		}).then(function(data) {
 			$.ajax({
-				url: "/playerinfo/getBankroll"
+				url: "/playercontroller/getBankroll"
 			}).then(function(data) {
 				$('.bankroll2').append("You have $" + data + "!<br/><br/><button onClick=\"deal()\">Play!</button>");
 			});
