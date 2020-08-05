@@ -1,15 +1,17 @@
 package com.InternSentinelSolutions.springboot.Blackjack;
 
 import java.math.BigDecimal;
+import java.util.Random;
 
 public class PlayerInfo {
 	String name;
 	private BigDecimal bankroll = BigDecimal.ZERO;
-	private BigDecimal remaining = BigDecimal.ZERO;
 	private BigDecimal bet = BigDecimal.ZERO;
-	private static BigDecimal original = BigDecimal.ZERO;
+	private BigDecimal original = BigDecimal.ZERO;
 	private BigDecimal insure_bet = BigDecimal.ZERO;
+	private BigDecimal original_bank = BigDecimal.ZERO;
 	private int decks;
+	private int playable;
 	
 	public void setDecks(int decks) {
 		this.decks = decks;
@@ -19,9 +21,19 @@ public class PlayerInfo {
 		return decks;
 	}
 	
+	public void setPlayable() {
+    	Random rand = new Random();
+    	int size = (getDecks()*52);
+    	this.playable = rand.nextInt(size);
+	}
+	
+	public int getPlayable() {
+		return playable;
+	}
+	
 	public void setBet(BigDecimal bet){
 		this.bet = bet;
-		original = bet;
+		this.original = bet;
 	}
 	
 	public BigDecimal getBet(){
@@ -34,21 +46,17 @@ public class PlayerInfo {
      
 	public void setBankroll(BigDecimal bankroll){
 		this.bankroll = bankroll;
-		this.remaining = bankroll;
+		this.original_bank = bankroll;
 	}
 		
 	public BigDecimal getBankroll(){
 		return bankroll;
 	}
+	
+	public BigDecimal getOriginalBankroll(){
+	    return original_bank;
+	}
 
-	public BigDecimal getRemaining(){
-		return remaining;
-	}
-	
-	public BigDecimal getPayout(){
-		return remaining.setScale(0,BigDecimal.ROUND_HALF_UP);
-	}
-	
 	public void setName(String fname){
 		this.name = fname;
 	}

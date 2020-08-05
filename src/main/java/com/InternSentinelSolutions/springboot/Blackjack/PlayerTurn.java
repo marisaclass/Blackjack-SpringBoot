@@ -4,11 +4,17 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class PlayerTurn {
-	PlayerInfo infop = new PlayerInfo();
+	private static PlayerInfo infop;
+	private static StartGame start;
 	private BigDecimal bet = infop.getBet();
 	private BigDecimal original = infop.getOriginalBet();
 	private boolean asked = false;
 	private Action force = null;
+	
+	public PlayerTurn(PlayerInfo info, StartGame os) {
+		infop = info;
+		start = os;
+	}
 	
 	public void setAction(String action) {
 		this.force = Action.valueOf(action);
@@ -17,6 +23,7 @@ public class PlayerTurn {
 	public Action getAction() {
 		return force;
 	}
+	
 	public int move(Hand phand, Hand dhand, Shoe shoe, AllHands all, int currcard) {
 		int status = 0;
 		
@@ -27,12 +34,11 @@ public class PlayerTurn {
 		}
 
 		if(force == Action.SUGGESTION) {
-			force = Suggestion.getAdvice(dhand.getHand().get(1).getValue(), phand, all);
+			this.force = Suggestion.getAdvice(dhand.getHand().get(1).getValue(), phand, all);
 		}
 		
 		if(asked == false && force == Action.INSURANCE && dhand.getHand().get(1).getRank().equalsIgnoreCase("A")){
 			//dealer is currently showing an ace
-			//info.setInsure() from request.getParamter("insure"); when they input it
 			if(infop.getInsure().compareTo(BigDecimal.ZERO) == 1) {
 				phand.setInsurance();
 			}
@@ -54,7 +60,7 @@ public class PlayerTurn {
 				currcard++;
 				phand.setDoubleDown();
 					
-				int up2 = playerTally(phand);
+				int up2 = start.playerTally(phand);
 				if(up2 == 1) { //busted
 					status = 1;
 				}else if(up2 == 2 || up2 == 4) { //dealer must have turn
@@ -77,7 +83,7 @@ public class PlayerTurn {
 			while(hitP && (currcard < shoe.getCurrDeck().size() - 1)) {	
 				force = Suggestion.getAdvice(dhand.getHand().get(1).getValue(), phand, all); //next action
 				
-				int up3 = playerTally(phand);	
+				int up3 = start.playerTally(phand);	
 				if(up3 == 1) { //busted
 					hitP = false;
 					status = 1;				
