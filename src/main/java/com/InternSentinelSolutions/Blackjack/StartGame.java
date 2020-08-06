@@ -7,17 +7,12 @@ import java.util.Random;
 public class StartGame {
 	private static int currcard = 0; //top most card in deck
 	private Shoe shoe = null;
-	private PlayerInfo infop = null;
 	ArrayList <Card> dealer = new ArrayList<Card>();
 	ArrayList<Card> player = new ArrayList<Card>();
 	Hand phand = null;
 	Hand dhand = null;
 	AllHands all = null;
 
-	public StartGame(PlayerInfo info){
-		this.infop = info;
-	}
-	
 	public void setShoe(int deck, int playable, int... cards) {
 		shoe = new Shoe(deck, playable, cards);
 		shoe.createDeck();
@@ -55,7 +50,7 @@ public class StartGame {
 		deal();
 	}
 
-	public int dealerTurn() {
+	public int dealerTurn(PlayerInfo infop) {
 		int status = 0;
 		int tally = playerTally(phand);
 		BigDecimal insure_bet = infop.getInsure();

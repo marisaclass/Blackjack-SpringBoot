@@ -1,4 +1,4 @@
-package com.InternSentinelSolutions.Blackjack;
+package com.InternSentinelSolutions.Blackjack.controller;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -6,6 +6,13 @@ import java.util.ArrayList;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.InternSentinelSolutions.Blackjack.PlayerInfo;
+import com.InternSentinelSolutions.Blackjack.PlayerTurn;
+import com.InternSentinelSolutions.Blackjack.StartGame;
+import com.InternSentinelSolutions.Blackjack.Action;
+import com.InternSentinelSolutions.Blackjack.Card;
+import com.InternSentinelSolutions.Blackjack.Hand;
 
 @RestController
 public class PlayerController {
@@ -17,8 +24,8 @@ public class PlayerController {
     
     public PlayerController() {
     	this.player = new PlayerInfo();
-    	this.os = new StartGame(player);
-    	this.pmove = new PlayerTurn(player, os);
+    	this.os = new StartGame();
+    	
     	this.bankroll = BigDecimal.ZERO;
     	this.bet = BigDecimal.ZERO;
     }
@@ -39,6 +46,7 @@ public class PlayerController {
 		player.setBet(this.bet);
 		player.setBankroll(this.bankroll);
 		os.setShoe(decks, player.getPlayable());
+		this.pmove = new PlayerTurn(player, os);
     }
 
 	@GetMapping("/startGame/playermove")
@@ -72,7 +80,7 @@ public class PlayerController {
 			//need to print dealer and players original/updating hands
 		}
 		if(statusP == 2 || statusP == 0) { //only call dealer if a split hand surrendered but not if single hand surrendered
-			statusD = os.dealerTurn();
+			statusD = os.dealerTurn(player);
 		}
 		
 		if(statusP == 1 || statusD == 1 || statusP == 2){ //end of deck so tally and terminate game

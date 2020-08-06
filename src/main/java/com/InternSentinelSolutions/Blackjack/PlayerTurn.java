@@ -4,16 +4,18 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class PlayerTurn {
-	private static PlayerInfo infop;
-	private static StartGame start;
-	private BigDecimal bet = infop.getBet();
-	private BigDecimal original = infop.getOriginalBet();
+	private PlayerInfo infop;
+	private StartGame start;
+	private BigDecimal bet;
+	private BigDecimal original;
 	private boolean asked = false;
 	private Action force = null;
 	
 	public PlayerTurn(PlayerInfo info, StartGame os) {
-		infop = info;
-		start = os;
+		this.infop = info;
+		this.start = os;
+		this.bet = infop.getBet();
+		this.original = infop.getOriginalBet();
 	}
 	
 	public void setAction(String action) {
