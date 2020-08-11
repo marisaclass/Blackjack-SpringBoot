@@ -19,32 +19,30 @@ public class PlayerController {
 	private PlayerInfo player;
 	private StartGame os;
 	private PlayerTurn pmove;
-    private BigDecimal bankroll;
-    private BigDecimal bet;
+    private BigDecimal bankroll = BigDecimal.ZERO;
+    private static BigDecimal betp = BigDecimal.ZERO;
     
     public PlayerController() {
     	this.player = new PlayerInfo();
     	this.os = new StartGame();
-    	
-    	this.bankroll = BigDecimal.ZERO;
-    	this.bet = BigDecimal.ZERO;
     }
 	
-    @GetMapping("/playercontroller/getBankroll")
+    @GetMapping("/player/getBankroll")
     public String getBankroll() {
     	return player.getBankroll().toString();
     }
     
-	@GetMapping("/playercontroller")
-    public void playerForm(@RequestParam("fname") String name, @RequestParam("decks") int decks, @RequestParam("bankroll") String bankroll,
+	@GetMapping("/player/setup")
+    public void playerForm(@RequestParam("fname") String name, @RequestParam("decks") int decks, @RequestParam("bank") String bankroll,
     		@RequestParam("bet") String bet){
 		
-		this.bet = new BigDecimal(bet);
-		this.bankroll = this.bankroll.subtract(this.bet);
+		betp = new BigDecimal(bet);
+		this.bankroll = new BigDecimal(bankroll);
 		player.setName(name);
 		player.setDecks(decks);
-		player.setBet(this.bet);
-		player.setBankroll(this.bankroll);
+		player.setBet(betp);
+		player.setOriginalBankroll(this.bankroll);
+		player.setBankroll(player.getOriginalBankroll().subtract(betp));
 		os.setShoe(decks, player.getPlayable());
 		this.pmove = new PlayerTurn(player, os);
     }
@@ -54,7 +52,7 @@ public class PlayerController {
 		pmove.setAction(action);
 		
 		if(pmove.getAction() == Action.INSURANCE) {
-			BigDecimal half = bet.divide(BigDecimal.valueOf(2.0));
+			BigDecimal half = betp.divide(BigDecimal.valueOf(2.0));
 			if(BigDecimal.valueOf(insurance).compareTo(half) <= 0) { //has to be atmost half of the current bet
 				player.setInsure(BigDecimal.valueOf(insurance));
 			}
@@ -69,11 +67,26 @@ public class PlayerController {
 		os.start(); //print out dealt hands
 	}
 	
-	@GetMapping("startGame")
-    public void playGame() {
+	@GetMapping("/startGame/showhands")
+	public String getHands() {
+		return "Dealer's hand:" + os.getDealerHand().getHand().get(1).toString() + "\n" + "Your hand:" + os.getPlayerHands().toString();
+	}
+	
+	@GetMapping("/startGame/redeal")
+	public void redeal(@RequestParam("bet") String bet) {
+		betp = new BigDecimal(bet);
+		player.setBet(betp);
+		player.setBankroll(player.getOriginalBankroll().subtract(betp));
+		
+		os.redeal(player.getBet());
+	}
+	
+	@GetMapping("/startGame")
+    public String playGame() {
 		int statusP = 0;
 		int statusD = 0;
 		boolean shuffled = false;
+		String end = null;
 			
 		for(int i = 0; i < os.getAll().getPlayerHands().size(); i++) {
 			statusP = pmove.move(os.getAll().getPlayerHands().get(i), os.getDealerHand(), os.getShoe(), os.getAll(), os.getCurrCard());
@@ -97,10 +110,10 @@ public class PlayerController {
 				if(winP == 21 && winD != 21 && count == false) {
 					if(p.size() == 2) {
 						current.setBlackjack();
-						BigDecimal back = bet.multiply(BigDecimal.valueOf(1.5));
+						BigDecimal back = betp.multiply(BigDecimal.valueOf(1.5));
 						bankroll = bankroll.add(back); //payout for blackjack is 1.5*bet
 					}else {
-						bankroll = bankroll.add(bet);
+						bankroll = bankroll.add(betp);
 					}
 					count = true;
 				}else if(winP > 21) {
@@ -110,7 +123,7 @@ public class PlayerController {
 							bankroll = bankroll.subtract(player.getOriginalBet());
 						}
 						else {
-							bankroll = bankroll.subtract(bet);
+							bankroll = bankroll.subtract(betp);
 						}
 						accounted = true;
 					}
@@ -120,15 +133,15 @@ public class PlayerController {
 					}
 					else {
 						if(accounted == false){
-							bankroll = bankroll.subtract(bet);
+							bankroll = bankroll.subtract(betp);
 						}
 						accounted = true;
 					}
 				}else if(winP > winD && winP <= 21 && count == false) { //no one busted but player gets back original bet
-					bankroll = bankroll.add(bet); //player gets back original betx2 (wins)
+					bankroll = bankroll.add(betp); //player gets back original betx2 (wins)
 					count = true;
 				}else if(current.isSurrender()) {
-					bankroll = bankroll.subtract(bet);
+					bankroll = bankroll.subtract(betp);
 				}
 			}
 			if(winD > 21) {
@@ -145,11 +158,14 @@ public class PlayerController {
 					os.setCurrCard();
 					shuffled = true; 
 				}
-				os.redeal(player.getOriginalBet(), bet);
+				end = "redeal";
 			}
 			else if(os.getCurrCard() > os.getShoe().getCurrDeck().size() - 1) {
 				os.clearHands();
+				end = "over";
 			}
 		}
+		
+		return end;
 	}
 }

@@ -144,15 +144,14 @@ public class StartGame {
 		currcard++;
 	}
 	
-	public void redeal(BigDecimal original, BigDecimal bet) {
+	public void redeal(BigDecimal bet) {
 		//clear
 		clearHands();
 		if(bet.compareTo(BigDecimal.valueOf(-1.0)) == 0) { 
 			//terminate
 			return;
 		}
-		original = bet;
-		//remaining = remaining.subtract(bet);
+		
 		all.addData(phand);
 		deal(); //dealing first 2 cards to dealing & 2 to player from shuffled deck
 	}

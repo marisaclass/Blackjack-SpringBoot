@@ -46,6 +46,9 @@ public class PlayerInfo {
      
 	public void setBankroll(BigDecimal bankroll){
 		this.bankroll = bankroll;
+	}
+	
+	public void setOriginalBankroll(BigDecimal bankroll){
 		this.original_bank = bankroll;
 	}
 		

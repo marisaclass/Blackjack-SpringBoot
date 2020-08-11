@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Home Page</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+ <script>
+  function playerForm() {
+		$.ajax({
+			url: "/player/setup?fname=" + document.getElementById("fname").value + "&decks=" + document.getElementById("decks").value
+				+ "&bank=" + document.getElementById("bank").value + "&bet=" + document.getElementById("bet").value
+		}).then(function(data) {
+			$.ajax({
+				url: "/player/getBankroll"
+			}).then(function(data) {
+				$('.bankroll2').append("You now have $" + data + "!<br/><br/><button class=\"btn btn-outline-success\" onClick=\"redirect()\")>Play!</button>");
+			});
+		});
+	}
+  
+  function redirect() {
+      window.location = "/actions.html";
+   }
+  </script>
+</head>
+<body>
+	Welcome to Blackjack!
+	<form method="post">
+		<div class="set">
+			 <label for="fname">Enter your name:</label><br>
+	  		<input type="text" id="fname" required><br>
+	  		
+			 <label for="decks">Set shoe</label><br>
+	  		<input type="number" id="decks"required><br>
+	  		
+	  		<label for="bank">Set bankroll</label><br>
+	  		<input type="number" id="bank"required><br>
+	  		
+	  		<label for="bet">Set starting bet</label><br>
+	  		<input type="number" id="bet"required><br>
+	  		
+			<button type="submit" form="Submit" onClick="playerForm()" class="btn btn-outline-success">Bet!</button>
+		</div>
+	</form>
+	
+	<p class="bankroll2"></p>
+	
+	
+</body>
+</html>

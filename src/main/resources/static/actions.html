@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Game Page</title>
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script>
+  	var play = true;
+  	var next = null;
+  	
+	function deal() {
+		$.ajax({
+			url: "/startGame/deal"
+		});
+	}
+	
+	function startGame(){
+		 $.ajax({
+				url: "/startGame/showhands"
+			}).then(function(data) {
+				$('.gameResult').append(data);
+				
+				$.ajax({
+					url: "/startGame/playermove?action=" + document.getElementById("action").value
+				}).then(function(data) {
+					$.ajax({
+						url: "/startGame"
+					}).then(function(data) {
+						next = data;
+				});
+			});
+		});
+	}
+			
+	function redirect() {
+		window.location = "/index.html";
+	}
+	
+	function redeal(){
+		$.ajax({
+			url: "/startGame/redeal?bet=" + document.getElementById("bet").value
+		}).then(function(data) {
+			$.ajax({
+				url: "/player/getBankroll"
+			}).then(function(data) {
+				$('.redeal').append("You now have $" + data + "!<br/><br/>");
+		});
+	});
+	}
+	
+	$(document).ready(function() {
+		while(play){
+			startGame();
+			if(next != null){
+				//end game/reset
+				if(next == "redeal"){
+					$.ajax({
+						url: "/player/getBankroll"
+					}).then(function(data) {
+						$('.bankroll2').append("You now have $" + data + "!<br/><br/>Make your next bet: <input type=\"number\" id=\"bet\" required><br/><br/><button class=\"btn btn-outline-success\" onClick=\"redeal()\")>Play!</button>");
+					});
+				}
+				else if(next == "over"){
+					$.ajax({
+						url: "/player/getBankroll"
+					}).then(function(data) {
+						$('.bankroll2').append("You finished with $" + data + "!<br/><br/><button class=\"btn btn-outline-success\" onClick=\"redirect()\")>Start new game!</button>");
+					});
+					play = false;
+				}
+				next = null;
+			}
+		}
+	});
+  
+  </script>
+</head>
+<body onload="deal()">
+
+	<p class="gameResult"></p>
+	
+	<form class="action" method="post">
+		<label for="action">Make your move:</label>
+		<select class="form-control" id="action" required>
+			  <option value="suggestion">Suggestion Utility</option>
+			  <option value="stand">Stand</option>
+			  <option value="hit">Hit</option>
+			  <option value="surrender">Surrender</option>
+			  <option value="double">Double Down</option>
+			  <option value="insure">Insurance</option>
+			  <option value="split">Split</option>
+		</select>
+		<button type="submit" class="btn btn-info" value="Submit">Go</button>
+		<button type="reset" class="btn btn-info" value="Reset">Reset</button>
+	</form>
+	
+	<p class="bankroll2"></p>
+	
+	<p class="redeal"> </p>
+</body>
+</html>
